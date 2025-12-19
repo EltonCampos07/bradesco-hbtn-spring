@@ -7,8 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,14 +36,15 @@ class ProdutoControllerTest {
         when(produtoService.listarTodos()).thenReturn(produtos);
 
         // Act
-        ResponseEntity<List<Produto>> response = produtoController.listarProdutos();
+        List<Produto> resultado = produtoController.listarProdutos();
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(2, response.getBody().size());
-        assertEquals("Notebook", response.getBody().get(0).getNome());
-        assertEquals("Mouse", response.getBody().get(1).getNome());
+        assertNotNull(resultado);
+        assertEquals(2, resultado.size());
+        assertEquals("Notebook", resultado.get(0).getNome());
+        assertEquals(3500.00, resultado.get(0).getPreco());
+        assertEquals("Mouse", resultado.get(1).getNome());
+        assertEquals(50.00, resultado.get(1).getPreco());
 
         verify(produtoService, times(1)).listarTodos();
     }
@@ -59,14 +58,13 @@ class ProdutoControllerTest {
         when(produtoService.buscarPorId(id)).thenReturn(produto);
 
         // Act
-        ResponseEntity<Produto> response = produtoController.buscarProdutoPorId(id);
+        Produto resultado = produtoController.buscarProdutoPorId(id);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(id, response.getBody().getId());
-        assertEquals("Notebook", response.getBody().getNome());
-        assertEquals(3500.00, response.getBody().getPreco());
+        assertNotNull(resultado);
+        assertEquals(id, resultado.getId());
+        assertEquals("Notebook", resultado.getNome());
+        assertEquals(3500.00, resultado.getPreco());
 
         verify(produtoService, times(1)).buscarPorId(id);
     }
@@ -80,14 +78,13 @@ class ProdutoControllerTest {
         when(produtoService.salvar(any(Produto.class))).thenReturn(produtoSalvo);
 
         // Act
-        ResponseEntity<Produto> response = produtoController.adicionarProduto(novoProduto);
+        Produto resultado = produtoController.adicionarProduto(novoProduto);
 
         // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(3L, response.getBody().getId());
-        assertEquals("Teclado", response.getBody().getNome());
-        assertEquals(150.00, response.getBody().getPreco());
+        assertNotNull(resultado);
+        assertEquals(3L, resultado.getId());
+        assertEquals("Teclado", resultado.getNome());
+        assertEquals(150.00, resultado.getPreco());
 
         verify(produtoService, times(1)).salvar(any(Produto.class));
     }
@@ -101,14 +98,13 @@ class ProdutoControllerTest {
         when(produtoService.atualizar(eq(id), any(Produto.class))).thenReturn(produtoAtualizado);
 
         // Act
-        ResponseEntity<Produto> response = produtoController.atualizarProduto(id, produtoAtualizado);
+        Produto resultado = produtoController.atualizarProduto(id, produtoAtualizado);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(id, response.getBody().getId());
-        assertEquals("Notebook Gamer", response.getBody().getNome());
-        assertEquals(4500.00, response.getBody().getPreco());
+        assertNotNull(resultado);
+        assertEquals(id, resultado.getId());
+        assertEquals("Notebook Gamer", resultado.getNome());
+        assertEquals(4500.00, resultado.getPreco());
 
         verify(produtoService, times(1)).atualizar(eq(id), any(Produto.class));
     }
@@ -120,11 +116,10 @@ class ProdutoControllerTest {
         doNothing().when(produtoService).deletar(id);
 
         // Act
-        ResponseEntity<String> response = produtoController.deletarProduto(id);
+        String resultado = produtoController.deletarProduto(id);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Produto deletado com sucesso", response.getBody());
+        assertEquals("Produto deletado com sucesso", resultado);
 
         verify(produtoService, times(1)).deletar(id);
     }
