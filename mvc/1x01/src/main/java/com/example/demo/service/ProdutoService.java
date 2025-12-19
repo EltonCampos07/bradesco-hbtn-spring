@@ -16,7 +16,7 @@ public class ProdutoService {
         this.produtoRepository = produtoRepository;
     }
 
-    public List<Produto> listarTodos() {
+    public List<Produto> listarProdutos(){
         return produtoRepository.findAll();
     }
 
@@ -25,20 +25,24 @@ public class ProdutoService {
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
     }
 
-    public Produto salvar(Produto produto) {
+    public Produto adicionarProduto(Produto produto){
         return produtoRepository.save(produto);
     }
 
-    public Produto atualizar(Long id, Produto produtoAtualizado) {
+    public Produto atualizarProduto(Long id, Produto produtoAtualizado) {
         Produto produto = buscarPorId(id);
         produto.setNome(produtoAtualizado.getNome());
         produto.setPreco(produtoAtualizado.getPreco());
         return produtoRepository.save(produto);
     }
 
-    public void deletar(Long id) {
-        Produto produto = buscarPorId(id);
-        produtoRepository.delete(produto);
+    public boolean deletarProduto(Long id) {
+        if (produtoRepository.existsById(id)) {
+            produtoRepository.deleteById(id);
+            return true;
+        }
+        throw new RuntimeException("Produto não encontrado");
     }
+
 }
 

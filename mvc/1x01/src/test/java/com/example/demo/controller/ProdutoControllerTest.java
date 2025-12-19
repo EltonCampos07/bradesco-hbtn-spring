@@ -33,7 +33,7 @@ class ProdutoControllerTest {
                 new Produto(2L, "Mouse", 50.00)
         );
 
-        when(produtoService.listarTodos()).thenReturn(produtos);
+        when(produtoService.listarProdutos()).thenReturn(produtos);
 
         // Act
         List<Produto> resultado = produtoController.listarProdutos();
@@ -46,7 +46,7 @@ class ProdutoControllerTest {
         assertEquals("Mouse", resultado.get(1).getNome());
         assertEquals(50.00, resultado.get(1).getPreco());
 
-        verify(produtoService, times(1)).listarTodos();
+        verify(produtoService, times(1)).listarProdutos();
     }
 
     @Test
@@ -75,7 +75,7 @@ class ProdutoControllerTest {
         Produto novoProduto = new Produto(null, "Teclado", 150.00);
         Produto produtoSalvo = new Produto(3L, "Teclado", 150.00);
 
-        when(produtoService.salvar(any(Produto.class))).thenReturn(produtoSalvo);
+        when(produtoService.adicionarProduto(any(Produto.class))).thenReturn(produtoSalvo);
 
         // Act
         Produto resultado = produtoController.adicionarProduto(novoProduto);
@@ -86,7 +86,7 @@ class ProdutoControllerTest {
         assertEquals("Teclado", resultado.getNome());
         assertEquals(150.00, resultado.getPreco());
 
-        verify(produtoService, times(1)).salvar(any(Produto.class));
+        verify(produtoService, times(1)).adicionarProduto(any(Produto.class));
     }
 
     @Test
@@ -95,7 +95,7 @@ class ProdutoControllerTest {
         Long id = 1L;
         Produto produtoAtualizado = new Produto(id, "Notebook Gamer", 4500.00);
 
-        when(produtoService.atualizar(eq(id), any(Produto.class))).thenReturn(produtoAtualizado);
+        when(produtoService.atualizarProduto(eq(id), any(Produto.class))).thenReturn(produtoAtualizado);
 
         // Act
         Produto resultado = produtoController.atualizarProduto(id, produtoAtualizado);
@@ -106,14 +106,14 @@ class ProdutoControllerTest {
         assertEquals("Notebook Gamer", resultado.getNome());
         assertEquals(4500.00, resultado.getPreco());
 
-        verify(produtoService, times(1)).atualizar(eq(id), any(Produto.class));
+        verify(produtoService, times(1)).atualizarProduto(eq(id), any(Produto.class));
     }
 
     @Test
     void deveDeletarProduto() {
         // Arrange
         Long id = 1L;
-        doNothing().when(produtoService).deletar(id);
+        doNothing().when(produtoService).deletarProduto(id);
 
         // Act
         String resultado = produtoController.deletarProduto(id);
@@ -121,7 +121,7 @@ class ProdutoControllerTest {
         // Assert
         assertEquals("Produto deletado com sucesso", resultado);
 
-        verify(produtoService, times(1)).deletar(id);
+        verify(produtoService, times(1)).deletarProduto(id);
     }
 
     @Test

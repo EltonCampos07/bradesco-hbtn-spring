@@ -19,7 +19,7 @@ public class ProdutoController {
 
     @GetMapping
     public List<Produto> listarProdutos() {
-        return produtoService.listarTodos();
+        return produtoService.listarProdutos();
     }
 
     @GetMapping("/{id}")
@@ -30,17 +30,17 @@ public class ProdutoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Produto adicionarProduto(@RequestBody Produto produto) {
-        return produtoService.salvar(produto);
+        return produtoService.adicionarProduto(produto);
     }
 
     @PutMapping("/{id}")
     public Produto atualizarProduto(@PathVariable Long id, @RequestBody Produto produto) {
-        return produtoService.atualizar(id, produto);
+        return produtoService.atualizarProduto(id, produto);
     }
 
     @DeleteMapping("/{id}")
     public String deletarProduto(@PathVariable Long id){
-        produtoService.deletar(id);
+        produtoService.deletarProduto(id);
         return "Produto deletado com sucesso";
     }
 
